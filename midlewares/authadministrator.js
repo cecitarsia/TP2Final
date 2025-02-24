@@ -1,8 +1,8 @@
-const jwt = require("jsonwebtoken");
+import jwt from "jsonwebtoken";
 
 async function authadministrator(req, res, next) {
   try {
-    if (req.params.userrol != "administrador") {
+    if (req.user.rol != "administrador") {
       return res.status(403).json({ error: "No posee autorización" }); //si no es admin tiene q cortarse la ejecucion por eso el return
     }
     next(); 
@@ -11,4 +11,4 @@ async function authadministrator(req, res, next) {
   }
 }
 
-module.exports = authadministrator;
+export default authadministrator;

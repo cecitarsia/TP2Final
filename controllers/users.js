@@ -1,4 +1,4 @@
-const users = require("../data/users");
+import users from "../data/users.js";
 
 async function getAllUsers() {
   return users.getAllUsers();
@@ -8,8 +8,8 @@ async function addUser(user) {
   return users.addUser(user);
 }
 
-async function addAdmintrator(user) {
-  return users.addAdmintrator(user);
+async function addAdmin(user) {
+  return users.addAdmin(user);
 }
 
 async function findByCredentials(email, password) {
@@ -30,9 +30,9 @@ async function deleteUser(id) {
   return users.deleteUser(id);
 }
 
-module.exports = {
+export default {
   addUser,
-  addAdmintrator,
+  addAdmin,
   getAllUsers,
   findByCredentials,
   generateToken,

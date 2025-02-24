@@ -1,4 +1,4 @@
-const productos = require("../data/productos");
+import productos from "../data/productos.js";
 
 async function getProductos() {
   return productos.getProductos();
@@ -12,20 +12,12 @@ async function getProductosPorTipo(type) {
   return productos.getProductosPorTipo(type);
 }
 
-async function getProductosPrecioAsc() {
-  return productos.getProductosPrecioAsc();
-}
-
-async function getProductosPrecioDes() {
-  return productos.getProductosPrecioDes();
-}
-
 async function addProducto(producto) {
   return productos.addProducto(producto);
 }
 
-async function updateProducto(producto) {
-  return productos.updateProducto(producto);
+async function updateProducto(id, data) {
+  return productos.updateProducto(id, data);
 }
 
 async function deleteProducto(id) {
@@ -36,12 +28,10 @@ async function comprarProductos(data, id) {
   return productos.comprarProductos(data, id);
 }
 
-module.exports = {
+export default {
   getProductos,
   getProducto,
   getProductosPorTipo,
-  getProductosPrecioAsc,
-  getProductosPrecioDes,
   addProducto,
   updateProducto,
   deleteProducto,

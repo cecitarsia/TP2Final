@@ -1,7 +1,14 @@
-const historial = require("../data/historial");
+import historial from "../data/historial.js";
 
 async function getHistorial(id) {
   return historial.getHistorial(id);
 }
 
-module.exports = {getHistorial};
+async function addCarrito(productos, userId) {
+  return historial.addCarrito(productos, userId);
+}
+
+export default {
+  getHistorial,
+  addCarrito,
+};

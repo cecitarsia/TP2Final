@@ -1,8 +1,8 @@
-var express = require("express");
-var router = express.Router();
-const usersController = require("../controllers/users");
-const auth = require("./../midlewares/auth");
-const authadministrator = require("./../midlewares/authadministrator");
+import { Router } from "express";
+var router = Router();
+import usersController from "../controllers/users.js";
+import auth from "./../midlewares/auth.js";
+import authadministrator from "./../midlewares/authadministrator.js";
 
 //solo los admin pueden obtener el listado completo de usuarios
 router.get("/", auth, authadministrator, async function (req, res, next) {
@@ -40,14 +40,14 @@ router.post("/login", async (req, res) => {
 });
 
 router.post("/admin", auth, authadministrator, async (req, res) => {
-  const new_User = req.body;
-  if (!new_User.email || !new_User.password) {
-    res.status(400).json({ error: "datos inválidos" });
-    return;
+  try {
+    const result = await usersController.addAdmin(req.body);
+    res.status(201).json(result);
+  } catch (error) {
+    res.status(400).json({ error: error.message });
   }
-  const result = await usersController.addAdmintrator(new_User);
-  res.send(result);
 });
+
 
 router.put("/:id", auth, async (req, res) => {
   try {
@@ -60,7 +60,7 @@ router.put("/:id", auth, async (req, res) => {
   }
 });
 
-//Ya funciona y hace la baja logica
+// Hace la baja logica
 router.delete("/:id", auth, async (req, res) => {
   try {
     if (req.params.userrol == "usuario" && req.params.userid != req.params.id) {
@@ -76,4 +76,4 @@ router.delete("/:id", auth, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

@@ -1,17 +1,18 @@
-require("dotenv").config();
-const jwt = require("jsonwebtoken");
+import dotenv from 'dotenv';
+dotenv.config();
+import pkg from 'jsonwebtoken';
+const { verify } = pkg;
 
 function auth(req, res, next) {
 
   try {
     const token = req.header("Authorization").replace("Bearer ", "");
-    const decodertoken = jwt.verify(token, process.env.CLAVEJWT);
-    req.params.userid = decodertoken._id;
-    req.params.userrol = decodertoken.rol;
+    const decodedToken = verify(token, process.env.CLAVEJWT);
+    req.user = { id: decodedToken._id, rol: decodedToken.rol };
     next();
-  } catch (error) {
+  } catch (error) { 
     res.status(401).send({ error: error.message });
   }
 }
 
-module.exports = auth;
+export default auth;

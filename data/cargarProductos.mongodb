@@ -2,7 +2,10 @@ use('Proyecto');
 
 db.Productos.drop();
 db.Productos.insertMany([
-    { titulo: 'Stella Artois', descripcion: 'La cerveza repatriada', precio: 100, imagen: "imagen", tipo: 'Bebida', stock: 5},
-    { titulo: 'Roque', descripcion: 'Queso azul', precio: 250, imagen: "imagen", tipo: 'Comida', stock: 15},
-    { titulo: 'Combo Quesos', descripcion: 'Pategras y Roquefort', precio: 520, imagen: "imagen", tipo: 'Combo', stock: 25},
+    { titulo: 'Cerveza Rubia Stella Artois', descripcion: 'La cerveza repatriada.', precio: 1800, imagen: "https://resizer.iproimg.com/unsafe/1280x/filters:format(webp)/https://assets.iprofesional.com/assets/jpg/2020/04/494399.jpg", tipo: 'Bebida', stock: 150},
+    { titulo: 'Roquefort', descripcion: 'Queso azul.', precio: 4500, imagen: "https://i.blogs.es/a7e81d/istock-861963944/650_1200.jpg", tipo: 'Comida', stock: 150},
+    { titulo: 'Combo Quesos 1', descripcion: 'Pategras y Roquefort.', precio: 5600, imagen: "https://mundogourmet.com.mx/tienda/wp-content/uploads/2024/01/quesos-del-mundo-150x150.jpg", tipo: 'Combo', stock: 50},
+    { titulo: 'Combo Quesos 2', descripcion: 'Brie y Mar del Plata.', precio: 7200, imagen: "https://mundogourmet.com.mx/tienda/wp-content/uploads/2024/01/quesos-del-mundo-150x150.jpg", tipo: 'Combo', stock: 40},
+    { titulo: 'Cerveza Patagonia IPA', descripcion: 'Cerveza amarga.', precio: 2100, imagen: "https://www.rinconbonvivant.com.ar/wp-content/uploads/2019/11/LATA-VERA-IPA.png", tipo: 'Combo', stock: 200},
+    { titulo: 'Cerveza Antares Barley Wine', descripcion: 'Cerveza potente.', precio: 2500, imagen: "https://www.espaciovino.com.ar/media/default/0001/53/thumb_52824_default_medium.jpeg", tipo: 'Combo', stock: 180},
 ]);

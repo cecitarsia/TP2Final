@@ -1,12 +1,8 @@
-#!/usr/bin/env node
-
-/**
- * Module dependencies.
- */
-
-var app = require('../app');
-var debug = require('debug')('proyectofinal:server');
-var http = require('http');
+import { getConnection } from "../data/conexion.js";
+import app from '../app.js';
+import debug from 'debug';
+const logger = debug('proyectofinal:server');
+import { createServer } from 'http';
 
 /**
  * Get port from environment and store in Express.
@@ -19,15 +15,24 @@ app.set('port', port);
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
+var server = createServer(app);
 
-/**
- * Listen on provided port, on all network interfaces.
- */
 
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
+async function startServer() {
+  try {
+    await getConnection(); // Conecta a la base antes de levantar el servidor
+    server.listen(port);
+    server.on('error', onError);
+    server.on('listening', onListening);
+  } catch (error) {
+    console.error("No se pudo conectar a MongoDB:", error);
+    process.exit(1);
+  }
+}
+
+startServer();  // Iniciar la conexión y luego el servidor
+
+
 
 /**
  * Normalize a port into a number, string, or false.

@@ -1,11 +1,12 @@
-const connection = require("./conexion");
-const { addCarrito } = require("./historial");
-const objectId = require("mongodb").ObjectId;
+import { getConnection } from "./conexion.js";
+import  addCarrito  from "./historial.js";
+import historial from "./historial.js"; // Importa el objeto exportado desde historial.js
+import { ObjectId } from "mongodb";
 const DATABASE = "Proyecto";
 const COLLECTION_PRODUCTS = "Productos";
 
 async function getProductos() {
-  const clientmongo = await connection.getConnection();
+  const clientmongo = await getConnection();
   const productos = await clientmongo
     .db(DATABASE)
     .collection(COLLECTION_PRODUCTS)
@@ -15,17 +16,17 @@ async function getProductos() {
 }
 
 async function getProducto(id) {
-  const clientmongo = await connection.getConnection();
+  const clientmongo = await getConnection();
   const producto = await clientmongo
     .db(DATABASE)
     .collection(COLLECTION_PRODUCTS)
-    .find({ _id: new objectId(id) })
+    .find({ _id: new ObjectId(String(id)) })
     .toArray();
   return producto;
 }
 
 async function getProductosPorTipo(type) {
-  const clientmongo = await connection.getConnection();
+  const clientmongo = await getConnection();
   const productos = await clientmongo
     .db(DATABASE)
     .collection(COLLECTION_PRODUCTS)
@@ -34,30 +35,9 @@ async function getProductosPorTipo(type) {
   return productos;
 }
 
-async function getProductosPrecioAsc() {
-  const clientmongo = await connection.getConnection();
-  const productos = await clientmongo
-    .db(DATABASE)
-    .collection(COLLECTION_PRODUCTS)
-    .find()
-    .sort({precio : 1})
-    .toArray();
-  return productos;
-}
-
-async function getProductosPrecioDes() {
-  const clientmongo = await connection.getConnection();
-  const productos = await clientmongo
-    .db(DATABASE)
-    .collection(COLLECTION_PRODUCTS)
-    .find()
-    .sort({precio : -1})
-    .toArray();
-  return productos;
-}
 
 async function addProducto(producto) {
-  const clientmongo = await connection.getConnection();
+  const clientmongo = await getConnection();
   const result = await clientmongo
     .db(DATABASE)
     .collection(COLLECTION_PRODUCTS)
@@ -65,45 +45,34 @@ async function addProducto(producto) {
   return result;
 }
 
-async function updateProducto(producto) {
-  const clientmongo = await connection.getConnection();
-  console.log(producto);
+async function updateProducto(id, data) {
+  const clientmongo = await getConnection();
+
   const result = await clientmongo
     .db(DATABASE)
     .collection(COLLECTION_PRODUCTS)
     .updateOne(
-      {
-        _id: new objectId(producto._id),
-      },
-      {
-        $set: {
-          titulo: producto.titulo,
-          descripcion: producto.descripcion,
-          precio: producto.precio,
-          imagen: producto.imagen,
-          tipo: producto.tipo,
-          stock: producto.stock,
-        },
-      }
+      { _id: new ObjectId(String(id)) },
+      { $set: data }
     );
   return result;
 }
 
-async function deleteProducto(id) {
-  const clientmongo = await connection.getConnection();
-  const result = await clientmongo
-    .db(DATABASE)
-    .collection(COLLECTION_PRODUCTS)
-    .deleteOne({ _id: new objectId(id) });
-  return result;
-}
+  async function deleteProducto(id) {
+    const clientmongo = await getConnection();
+    const result = await clientmongo
+      .db(DATABASE)
+      .collection(COLLECTION_PRODUCTS)
+      .deleteOne({ _id: new ObjectId(String(id)) });
+    return result;
+  }
 
 async function comprarProductos(productos, userId) {
   //chequear stock, compara cant producto con stock actual
   const ids = productos.map((producto) => {
-    return new objectId(producto._id);
+    return new ObjectId(String(producto._id));
   });
-  const clientmongo = await connection.getConnection();
+  const clientmongo = await getConnection();
   const coleccionProductos = await clientmongo
     .db(DATABASE)
     .collection(COLLECTION_PRODUCTS);
@@ -114,13 +83,13 @@ async function comprarProductos(productos, userId) {
   const stockSuficiente = chequearStock(productos, result);
   if (stockSuficiente) {
     restarStock(productos, coleccionProductos);
-    await addCarrito(productos, userId);
+    await historial.addCarrito(productos, userId);
   }
   return stockSuficiente;
 }
 
 function chequearStock(prodReq, prodDb) {
-  //if hay todos los productos en su cantidad-> suma al historial
+  //si hay todos los productos en su cantidad-> suma al historial
   let stockSuficiente = true;
   let i = 0;
   while (stockSuficiente && i < prodReq.length) {
@@ -138,7 +107,7 @@ function restarStock(prodReq, coleccionProductos) {
   prodReq.forEach((element) => {
     coleccionProductos.updateOne(
       {
-        _id: new objectId(element._id),
+        _id: new  ObjectId(String(element._id)),
       },
       {
         $inc: { stock: -element.cantidad },
@@ -147,12 +116,10 @@ function restarStock(prodReq, coleccionProductos) {
   });
 }
 
-module.exports = {
+export default {
   getProductos,
   getProducto,
   getProductosPorTipo,
-  getProductosPrecioAsc,
-  getProductosPrecioDes,
   addProducto,
   updateProducto,
   deleteProducto,

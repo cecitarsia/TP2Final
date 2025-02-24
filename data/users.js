@@ -1,13 +1,15 @@
-const connection = require("./conexion");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
+import { getConnection } from "./conexion.js";
+import { hash, compare } from "bcrypt";
+import pkg from 'jsonwebtoken';
+const { sign } = pkg;
 const DATABASE = "Proyecto";
 const COLLECTION_USERS = "Usuarios";
-const parseObjectId = require("../utils/parseObjectId");
-require("dotenv").config();
+import parseObjectId from "../utils/parseObjectId.js";
+import dotenv from 'dotenv';
+dotenv.config();
 
 async function getAllUsers() {
-  const clientmongo = await connection.getConnection();
+  const clientmongo = await getConnection();
   const users = await clientmongo
     .db(DATABASE)
     .collection(COLLECTION_USERS)
@@ -17,14 +19,24 @@ async function getAllUsers() {
 }
 
 async function addUser(user) {
-  const clientmongo = await connection.getConnection();
+  const clientmongo = await getConnection();
+
+  const userExistente = await clientmongo
+    .db(DATABASE)
+    .collection(COLLECTION_USERS)
+    .findOne({ email: user.email });
+  
+  if (userExistente) {
+    throw new Error("El usuario con ese email ya existe.");
+  }
+
   user.activo = true;
   if (!user.rol) {
     //si un usuario no tiene rol le asignamos el de usuario comun, cuando agregamos el admin con este metodo ya tiene su rol de admin
     user.rol = "usuario";
   }
 
-  user.password = await bcrypt.hash(user.password, 8);
+  user.password = await hash(user.password, 8);
 
   const result = await clientmongo
     .db(DATABASE)
@@ -33,13 +45,23 @@ async function addUser(user) {
   return result;
 }
 
-async function addAdmintrator(user) {
+async function addAdmin(user) {
+  const clientmongo = await getConnection();
+  const userExistente = await clientmongo
+  .db(DATABASE)
+  .collection(COLLECTION_USERS)
+  .findOne({ email: user.email });
+
+if (userExistente) {
+  throw new Error("El usuario con ese email ya existe.");
+}
   user.rol = "administrador";
   return addUser(user);
 }
 
+
 async function findByCredentials(email, password) {
-  const clientmongo = await connection.getConnection();
+  const clientmongo = await getConnection();
   const user = await clientmongo
     .db(DATABASE)
     .collection(COLLECTION_USERS)
@@ -49,7 +71,7 @@ async function findByCredentials(email, password) {
     throw new Error("Credenciales invalidas");
   }
 
-  const isMatch = await bcrypt.compare(password, user.password);
+  const isMatch = await compare(password, user.password);
   if (!isMatch) {
     throw new Error("Credenciales invalidas");
   }
@@ -58,7 +80,7 @@ async function findByCredentials(email, password) {
 }
 
 function generateToken(user) {
-  const token = jwt.sign(
+  const token = sign(
     { _id: user._id, rol: user.rol },
     process.env.CLAVEJWT,
     {
@@ -71,7 +93,7 @@ function generateToken(user) {
 
 //Solo para actualizar el mail
 async function updateUser(id, user) {
-  const clientmongo = await connection.getConnection();
+  const clientmongo = await getConnection();
 
   const obId = parseObjectId(id);
   const result = await clientmongo
@@ -82,7 +104,7 @@ async function updateUser(id, user) {
 }
 
 async function deleteUser(id) {
-  const clientmongo = await connection.getConnection();
+  const clientmongo = await getConnection();
   const obId = parseObjectId(id);
   const result = await clientmongo
     .db(DATABASE)
@@ -91,9 +113,9 @@ async function deleteUser(id) {
   return result;
 }
 
-module.exports = {
+export default {
   addUser,
-  addAdmintrator,
+  addAdmin,
   getAllUsers,
   findByCredentials,
   generateToken,

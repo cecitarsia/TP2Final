@@ -21,27 +21,21 @@ Los usuarios podrán navegar por el listado de productos, filtrar por tipo de pr
 - ABM usuarios
 - ABM productos
 - Filtro por tipo de producto (combo/bebida/comida)
-- Orden de productos por precio (ascendente/descendente y viceversa)
 - Comprar productos
 - Obtener el historial de compra
-
-### Instrucciones de Uso:
-
-El proyecto se encuentra deployado en Heroku con la siguiente URL:
-[https://tp2-proyecto-final.herokuapp.com]
 
 
 ### Listado de endpoints:
 #### Home Productos/ Historial de Compras
 
 - Get All Productos
-[https://tp2-proyecto-final.herokuapp.com/api/productos]
+[http://localhost:3000/api/productos]
 
 - Get producto por Id
-[https://tp2-proyecto-final.herokuapp.com/api/productos/:id]
+[http://localhost:3000/api/productos/:id]
 
 - Agregar un producto (con token de admin)
-[https://tp2-proyecto-final.herokuapp.com/api/productos]
+[http://localhost:3000/api/productos]
 ```
 En body:
 {
@@ -54,11 +48,10 @@ En body:
    }
 ```
 - Modificar un producto (con token de admin)
-​​[https://tp2-proyecto-final.herokuapp.com/api/productos]
+​​[http://localhost:3000/api/productos/:id]
 ```
 En body:
 {
-       "_id": "[id]",
        "titulo": "[titulo]",
        "descripcion": "[descripcion]",
        "precio": [precio],
@@ -68,40 +61,29 @@ En body:
    }
 ```
 - Eliminar un producto (con token de admin)
-[https://tp2-proyecto-final.herokuapp.com/api/productos/:id]
+[http://localhost:3000/api/productos/:id]
 
 - Comprar productos (con token de usuario)
-[https://tp2-proyecto-final.herokuapp.com/api/productos/comprar]
+[http://localhost:3000/api/historial]  
 ```
-En body:
 {"productos": [{
-       "_id": "[id]",
-       "titulo": "[titulo]",
-       "precio": [precio],
-       "cantidad": [cantidad]
-   },
-   {
-       "_id": "[id]",
-       "titulo": "[titulo]",
-       "precio": [precio],
-       "cantidad": [cantidad]
-   }],
-   "_id": "[id]"
+        "_id": "[id]",
+        "cantidad": [cantidad]
+    },
+    {
+         "_id": "[id]",
+        "cantidad": [cantidad]
+}]
 }
 ```
-- Get historiales por Id de usuario
-[https://tp2-proyecto-final.herokuapp.com/api/historial/:id]
-- Filtrar productos por tipo
-[https://tp2-proyecto-final.herokuapp.com/api/productos/filter?tipo=[tipo]]
-- Get productos de menor a mayor precio
-[http:https://tp2-proyecto-final.herokuapp.com/api/productos/menorPrecio]
-- Get productos de mayor a menor precio
-[https://tp2-proyecto-final.herokuapp.com/api/productos/menorPrecio]
+- Get historial de usuario
+[http://localhost:3000/api/historial]
+
 
 
 #### Users
 - Agregar usuario
-[https://tp2-proyecto-final.herokuapp.com/api/users]
+[http://localhost:3000/api/users]
 ```
 En body:
 {
@@ -110,7 +92,7 @@ En body:
 }
 ```
 - Login
-[https://tp2-proyecto-final.herokuapp.com/api/users/login]
+[http://localhost:3000/users/login]
 ```
 En body:
 {
@@ -119,7 +101,7 @@ En body:
 }
 ```
 - Agregar admin (con token de admin)
-[https://tp2-proyecto-final.herokuapp.com/api/users/admin]
+[http://localhost:3000/api/users/admin]
 ```
 En body:
 {
@@ -128,8 +110,8 @@ En body:
 }
 ```
 - Get All Users (con token de admin)
-[https://tp2-proyecto-final.herokuapp.com/api/users]
+[http://localhost:3000/api/users]
 
 - Borrar User (Desactivar/Baja Lógica)
-[https://tp2-proyecto-final.herokuapp.com/api/users/:id]
+[http://localhost:3000/api/users/:id]
 
