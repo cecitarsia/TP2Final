@@ -13,7 +13,7 @@ La aplicación ofrece la posibilidad de realizar compras por:
 - unidad (un tipo de cerveza, una sola picada)
 - combos (combos de distintos tipos de cerveza o cerveza + picada)
  
-Los usuarios podrán navegar por el listado de productos, filtrar por tipo de producto, por precio descendente y ascendente, agregar los productos con su cantidad a un nuevo carrito y acceder a su historial de compras.
+Los usuarios podrán navegar por el listado de productos, agregar los productos con su cantidad a un nuevo carrito y acceder a su historial de compras.
 
 ### Funcionalidades:
 
