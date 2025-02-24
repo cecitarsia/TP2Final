@@ -20,7 +20,6 @@ Los usuarios podrán navegar por el listado de productos, agregar los productos 
 - Login/Registro
 - ABM usuarios
 - ABM productos
-- Filtro por tipo de producto (combo/bebida/comida)
 - Comprar productos
 - Obtener el historial de compra
 
